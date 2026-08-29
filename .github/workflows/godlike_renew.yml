@@ -1,0 +1,36 @@
+name: Godlike Auto Renew
+
+on:
+  schedule:
+    # 每天 UTC 03:00（北京时间 11:00）自动执行
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  renew:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          pip install requests
+
+      # 使用已有 PAT 拉取私库脚本
+      - name: Checkout Private Script
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository_owner }}/task-scripts
+          token: ${{ secrets.MY_PAT }}
+          path: scripts
+
+      # 运行续期脚本
+      - name: Run Renew Task
+        env:
+          GODLIKE_CLIENT_TOKEN: ${{ secrets.GODLIKE_CLIENT_TOKEN }}
+          GODLIKE_SERVER_UUID: ${{ secrets.GODLIKE_SERVER_UUID }}
+        run: |
+          python scripts/godlike_renew.py
