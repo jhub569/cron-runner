@@ -2,7 +2,7 @@ name: Godlike Auto Renew
 
 on:
   schedule:
-    # 每天 UTC 03:00（北京时间 11:00）自动执行
+    # 每天 UTC 03:00 (北京时间 11:00) 自动执行
     - cron: '0 3 * * *'
   workflow_dispatch:
 
@@ -30,7 +30,10 @@ jobs:
       # 运行续期脚本
       - name: Run Renew Task
         env:
+          GODLIKE_ACCOUNTS: ${{ secrets.GODLIKE_ACCOUNTS }}
           GODLIKE_CLIENT_TOKEN: ${{ secrets.GODLIKE_CLIENT_TOKEN }}
           GODLIKE_SERVER_UUID: ${{ secrets.GODLIKE_SERVER_UUID }}
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
         run: |
           python scripts/godlike_renew.py
