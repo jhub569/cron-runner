@@ -1,0 +1,33 @@
+name: Zenode Auto Renew
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0,12 * * *'
+
+jobs:
+  renew-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Private Script
+        uses: actions/checkout@v4
+        with:
+          repository: 'jhub569/task-scripts'
+          token: ${{ secrets.MY_PAT }}
+          path: './core'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run Renew Script
+        env:
+          ZENODE_API_KEY: ${{ secrets.ZENODE_API_KEY }}
+          ZENODE_SERVER_ID: ${{ secrets.ZENODE_SERVER_ID }}
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+        run: python ./core/zenode_renew.py
