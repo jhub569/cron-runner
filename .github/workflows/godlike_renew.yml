@@ -1,9 +1,9 @@
 name: Godlike Auto Renew
 
 on:
-  schedule:
+  #schedule:
     # 每天 UTC 03:00 (北京时间 11:00) 自动执行
-    - cron: '0 3 * * *'
+    # - cron: '0 3 * * *'
   workflow_dispatch:
 
 jobs:
