@@ -17,7 +17,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          pip install requests
+          pip install requests curl_cffi
 
       # 使用已有 PAT 拉取私库脚本
       - name: Checkout Private Script
